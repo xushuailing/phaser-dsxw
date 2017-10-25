@@ -470,6 +470,27 @@ var GameState = function() {
 					setTimeout(function() {
 						game.state.add('score', scoreState);
 						game.state.start('score');
+						var userScore;
+						if (c.data.userScore * c.data.CoreNumber > c.data.EnergyHighest) {
+							userScore = c.data.EnergyHighest;
+						} else {
+							userScore = c.data.userScore * c.data.CoreNumber;
+						}
+						/* 能量增加 */
+						$.ajax({
+							type: 'POST',
+							url: c.data.url + 'Desai_RecordService.ashx?pagetype=add2',
+							async: false,
+							data: {
+								uID: c.data.uID,
+								openID: c.data.wxID,
+								sportsModeID: c.data.GameType,
+								sportsModeName:
+									c.data.userGameLimit[c.data.GameType - 1].SportsModeName,
+								score: userScore
+							},
+							success: function(data) {}
+						});
 					}, 2000);
 					clearInterval(Interval);
 					return;
@@ -739,21 +760,6 @@ var scoreState = function() {
 		} else {
 			userScore = c.data.userScore * c.data.CoreNumber;
 		}
-		/* 能量增加 */
-		$.ajax({
-			type: 'POST',
-			url: c.data.url + 'Desai_RecordService.ashx?pagetype=add2',
-			async: false,
-			data: {
-				uID: c.data.uID,
-				openID: c.data.wxID,
-				sportsModeID: c.data.GameType,
-				sportsModeName:
-					c.data.userGameLimit[c.data.GameType - 1].SportsModeName,
-				score: userScore
-			},
-			success: function(data) {}
-		});
 	};
 	this.create = function() {
 		/**
