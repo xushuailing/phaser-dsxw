@@ -242,12 +242,17 @@ var selectState = function() {
 		function fun() {
 			troops = game.add.image(0, 0, 'tpl_module');
 			selectGame = game.add.image(0, 0, 'selectGame');
+			c.Click(175,981, '排行榜','line1', function() {
+				openTopWay = 'gameBegin';
+				game.state.add('Top', TopState);
+				game.state.start('Top');
+			});
 			game.add
 				.text(
 					game.world.centerX,
 					game.world.height - 90,
 					`已经\t\t\t\t\t\t\t\t\t\t参加活动，快来参加吧`,
-					{fill: '#000', font: '25px Arial', align: 'center'}
+					{ fill: '#000', font: '25px Arial', align: 'center' }
 				)
 				.anchor.set(0.5);
 			game.add
@@ -255,7 +260,7 @@ var selectState = function() {
 					game.world.centerX - 100,
 					game.world.height - 90,
 					c.data.memberInfo,
-					{fill: '#f00', font: '25px Arial', align: 'center'}
+					{ fill: '#f00', font: '25px Arial', align: 'center' }
 				)
 				.anchor.set(0.5);
 			c.Title('运动模式');
@@ -618,14 +623,14 @@ var GameState = function() {
 			game.add
 				.tween(langan)
 				.to(
-					{y: langan.y + langan.height - 200},
+					{ y: langan.y + langan.height - 200 },
 					gameTime * 1000,
 					'Linear',
 					true
 				);
 			game.add
 				.tween(langan.scale)
-				.to({x: 1.5, y: 1.5}, gameTime * 1000, 'Linear', true);
+				.to({ x: 1.5, y: 1.5 }, gameTime * 1000, 'Linear', true);
 			touch('y');
 		}
 		function tiaoyuan() {
@@ -783,13 +788,14 @@ var scoreState = function() {
 			game.world.centerX,
 			914,
 			`你本次为德赛西威运动火炬添加\t\t\t\t\t\t\t\t\t个能量`,
-			{fill: '#000', font: '25px Arial', align: 'center'}
+			{ fill: '#000', font: '25px Arial', align: 'center' }
 		);
-		c.Click(-140, 1050, '排行榜', function() {
+		c.Click(-140, 1050, '排行榜','line2', function() {
+			openTopWay = 'gameEnd';
 			game.state.add('Top', TopState);
 			game.state.start('Top');
 		});
-		c.Click(140, 1050, '继续游戏', function() {
+		c.Click(140, 1050, '继续游戏','line2', function() {
 			/* 查看已经游玩的次数以及游玩次数的限制和选择的队伍 */
 			$.ajax({
 				type: 'POST',
@@ -840,16 +846,18 @@ var TopState = function() {
 			success: function(data) {
 				var data = eval('(' + data + ')').data;
 				var arr = [];
-				var arrData = []
+				var arrData = [];
 				data.forEach(function(e) {
-					arr.push(parseInt(e.TeamEnergy))
+					arr.push(parseInt(e.TeamEnergy));
 				}, this);
-				arr.sort(function(a,b){return b-a})
+				arr.sort(function(a, b) {
+					return b - a;
+				});
 				for (var i = 0; i < arr.length; i++) {
 					for (var j = 0; j < data.length; j++) {
 						var e = data[j];
 						if (parseInt(e.TeamEnergy) == arr[i]) {
-							arrData.push(e)
+							arrData.push(e);
 						}
 					}
 				}
@@ -978,16 +986,21 @@ var TopState = function() {
 				.anchor.set(0.5);
 		}
 
-		c.Click(-140, 1100, '邀请好友', function() {
+		c.Click(-140, 1100, '邀请好友','line2', function() {
 			shareHint();
 		});
 
-		c.Click(140, 1100, '朋友圈嘚瑟', function() {
+		c.Click(140, 1100, '朋友圈嘚瑟','line2', function() {
 			shareHint();
 		});
 		c.close(function() {
-			game.state.add('score', scoreState);
-			game.state.start('score');
+			if (openTopWay === 'gameEnd') {
+				game.state.add('score', scoreState);
+				game.state.start('score');
+			} else {
+				game.state.add('select', selectState);
+				game.state.start('select');
+			}
 		});
 
 		function shareHint() {

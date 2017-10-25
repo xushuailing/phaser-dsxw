@@ -31,16 +31,16 @@ var c = {
 		text.anchor.set(0.5);
 		return text;
 	},
-	Click: function(x, y, name, callback) {
-		var text = game.add.text(game.world.centerX + x, y, name, {
+	Click: function(x, y, text,img, callback) {
+		var t = game.add.text(game.world.centerX + x, y, text, {
 			fill: '#000',
 			font: '30px Arial',
 			align: 'center'
 		});
-		var click = game.add.button(game.world.centerX + x, y, 'line2', function() {
+		var click = game.add.button(game.world.centerX + x, y, img, function() {
 			callback();
 		});
-		text.anchor.set(0.5);
+		t.anchor.set(0.5);
 		click.anchor.set(0.5);
 		return click;
 	},
@@ -154,6 +154,7 @@ var c = {
 		 * @userPic 用户头像
 		 * @userDesaiScore 用户总分数
 		 * @userURL 用户分享链接
+		 * @openTopWay 打开排行榜方式
 		 */
 		GameType: null,
 		url: 'http://saas.zeego.cn/Interface/DesaiTorch/',
@@ -174,6 +175,7 @@ var c = {
 		userPic:null,
 		userDesaiScore:null,
 		userURL:null,
+		openTopWay:null,
 	}
 };
 
