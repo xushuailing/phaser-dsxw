@@ -26,7 +26,6 @@ var mainState = function() {
 				iD: c.data.iD
 			},
 			success: function(data) {
-				console.log(data);
 				var data = eval('(' + data + ')').data;
 				data.forEach(function(val) {
 					troopsNames.push(val.Name);
@@ -858,7 +857,6 @@ var TopState = function() {
 		});
 	};
 	this.preload = function() {
-		console.log(c.data.userPic);
 		game.load.image('userPic', c.data.userPic);
 	};
 	this.create = function() {
@@ -882,7 +880,10 @@ var TopState = function() {
 		var userTextString = `${c.data.wxName}，感谢你为德赛西威第七届田径运动会火炬添加${c.data
 			.userDesaiScore}个能量，在小伙伴排名第${c.data.userScoreRank}位。`;
 		var userTextConcent = '';
-		var sumColorBeg = (sumColorEnd = numColorBeg = numColorEnd = 0);
+		var numColorBeg = userTextString.indexOf('名第') + 2;
+		var numColorEnd = userTextString.length - 2;
+		var sumColorBeg = userTextString.indexOf('添加') + 2;
+		var sumColorEnd = userTextString.indexOf('个能量');
 		for (var i = 0; i < userTextString.length; i++) {
 			var t = userTextString[i];
 			if (i % 16 == 0 && i > 0) {
@@ -906,11 +907,14 @@ var TopState = function() {
 			}
 			userTextConcent += t;
 		}
-		console.log(sumColorBeg)
 		var userText = game.add.text(230, 161, userTextConcent, {
 			fill: '#000',
 			font: '25px Arial'
 		});
+		userText.addColor('#f00', sumColorBeg);
+		userText.addColor('#000', sumColorEnd);
+		userText.addColor('#f00', numColorBeg);
+		userText.addColor('#000', numColorEnd);
 		PicShadeLine.beginFill(0xff0000);
 		PicShadeLine.drawRoundedRect(92, 159, 124, 124, 20);
 		PicShade.beginFill(0x000000);
