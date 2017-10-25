@@ -839,8 +839,21 @@ var TopState = function() {
 			},
 			success: function(data) {
 				var data = eval('(' + data + ')').data;
-				// console.log(data);
-				troopsData = data;
+				var arr = [];
+				var arrData = []
+				data.forEach(function(e) {
+					arr.push(parseInt(e.TeamEnergy))
+				}, this);
+				arr.sort(function(a,b){return b-a})
+				for (var i = 0; i < arr.length; i++) {
+					for (var j = 0; j < data.length; j++) {
+						var e = data[j];
+						if (parseInt(e.TeamEnergy) == arr[i]) {
+							arrData.push(e)
+						}
+					}
+				}
+				troopsData = arrData;
 			}
 		});
 		/* 用户排行 */
