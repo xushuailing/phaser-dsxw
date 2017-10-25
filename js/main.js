@@ -379,6 +379,7 @@ var GameState = function() {
 		});
 		hint.anchor.set(0.5);
 		Return = game.add.button(34, 220, 'return', function() {
+			clearInterval(time);
 			clearInterval(Interval);
 			game.state.add('select', selectState);
 			game.state.start('select');
