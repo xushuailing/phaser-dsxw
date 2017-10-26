@@ -120,7 +120,7 @@ var bootState = function(game) {
 			c.data.DesaiTeamID == null
 		) {
 			shareOption({
-				title: `【爱运动，炬能量】一起来为德赛西威第七届运动火炬添加能量！`,
+				title: `【爱运动，炬能量】一起来为德赛西威第七届运动火会炬添加能量！`,
 				link: 'http://saas.zeego.cn/Project/DeSaiTorch',
 				pic: `http://saas.zeego.cn/Project/DeSaiTorch/images/shareLogo.jpg`,
 				desc: `【爱运动 炬能量】我是${c.data.wxName}，一起来为德赛西威第七届田径运动会火炬添加能量！`,
@@ -135,7 +135,7 @@ var bootState = function(game) {
 			});
 		} else {
 			shareOption({
-				title: `【爱运动，炬能量】一起来为德赛西威第七届运动火炬添加能量！`,
+				title: `【爱运动，炬能量】一起来为德赛西威第七届运动会火炬添加能量！`,
 				link: c.data.userURL,
 				pic: `http://saas.zeego.cn/Project/DeSaiTorch/images/icon${c.data
 					.DesaiTeamID}.png`,
