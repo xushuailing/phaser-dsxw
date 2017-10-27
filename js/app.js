@@ -187,7 +187,9 @@ c.data.wxName = c._InitWXLogin().name
 c.data.wxPic = c._InitWXLogin().headimgsrc
 // c.data.wxID = 'ocpe8wRb3HI2HoLTxtXIIe0zDbec';
 // c.data.wxName = '许帅领';
+// c.data.wxID = 'ocpe8wYNUIHwwski1Dltg5Et';
+// c.data.wxName = 'zeego';
 // c.data.wxPic =
-	// '"http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo0Rp1onxRjt2DUplibavP0qHibWsiaNIUicokmhHm1ia1V9LI3licmduOGm6t2oaPqHdJbHo0PkyN7uYkg/0"';
+	// 'http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo0Rp1onxRjt2DUplibavP0qHibWsiaNIUicokmhHm1ia1V9LI3licmduOGm6t2oaPqHdJbHo0PkyN7uYkg/0';
 game.state.add('boot', bootState);
 game.state.start('boot');
