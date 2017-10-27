@@ -160,7 +160,7 @@ var mainState = function() {
 				text = game.add.text(
 					game.world.centerX,
 					210,
-					`您已选择\t${c.data.DesaiTeamName}\t的队伍，为他们添加火炬能量`,
+					'您已选择\t'+c.data.DesaiTeamName+'\t的队伍，为他们添加火炬能量',
 					{
 						fill: '#000',
 						font: '20px Arial',
@@ -189,7 +189,7 @@ var mainState = function() {
 					}
 				});
 			} else if (c.data.DesaiTeamID != e.id) {
-				c.hint(`您选择的队伍为\n${c.data.DesaiTeamName}!`);
+				c.hint('您选择的队伍为\n'+c.data.DesaiTeamName+'!');
 			} else {
 				game.state.add('select', selectState);
 				game.state.start('select');
@@ -251,7 +251,7 @@ var selectState = function() {
 				.text(
 					game.world.centerX,
 					game.world.height - 90,
-					`已经\t\t\t\t\t\t\t\t\t\t参加活动，快来参加吧`,
+					'已经\t\t\t\t\t\t\t\t\t\t参加活动，快来参加吧',
 					{ fill: '#000', font: '25px Arial', align: 'center' }
 				)
 				.anchor.set(0.5);
@@ -788,7 +788,7 @@ var scoreState = function() {
 		p = game.add.text(
 			game.world.centerX,
 			914,
-			`你本次为德赛西威运动会火炬添加\t\t\t\t\t\t\t\t\t个能量`,
+			'你本次为德赛西威运动会火炬添加\t\t\t\t\t\t\t\t\t个能量',
 			{ fill: '#000', font: '25px Arial', align: 'center' }
 		);
 		c.Click(-140, 1050, '排行榜','line2', function() {
@@ -905,8 +905,7 @@ var TopState = function() {
 		var PicShadeLine = game.add.graphics(0, 0); // 边框
 		var PicShade = game.add.graphics(0, 0); // 遮罩
 		var userPic = game.add.image(94, 161, 'userPic'); // 用户头像
-		var userTextString = `${c.data.wxName}，感谢你为德赛西威第七届田径运动会火炬添加${c.data
-			.userDesaiScore}个能量，在小伙伴排名第${c.data.userScoreRank}位。`;
+		var userTextString = c.data.wxName+'，感谢你为德赛西威第七届田径运动会火炬添加'+c.data.userDesaiScore+'个能量，在小伙伴排名第'+c.data.userScoreRank+'位。';
 		var userTextConcent = '';
 		var numColorBeg = userTextString.indexOf('名第') + 2;
 		var numColorEnd = userTextString.length - 2;
