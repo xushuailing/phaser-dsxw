@@ -62,12 +62,12 @@ var bootState = function(game) {
 
 		if (url.indexOf('teamID') > 0 && c.data.DesaiTeamID == null) {
 			// alert(1)
-			c.data.isShareUrl = true;
-			var teamID = url
-				.split('?')[1]
-				.split('=')[1]
-				.split('&')[0];
-			c.data.DesaiTeamID = teamID;
+			// c.data.isShareUrl = true;
+			// var teamID = url
+			// 	.split('?')[1]
+			// 	.split('=')[1]
+			// 	.split('&')[0];
+			// c.data.DesaiTeamID = teamID;
 		}
 		/* 查看队伍名 */
 		$.ajax({
