@@ -788,7 +788,7 @@ var scoreState = function() {
 		p = game.add.text(
 			game.world.centerX,
 			914,
-			`你本次为德赛西威运动火炬添加\t\t\t\t\t\t\t\t\t个能量`,
+			`你本次为德赛西威运动会火炬添加\t\t\t\t\t\t\t\t\t个能量`,
 			{ fill: '#000', font: '25px Arial', align: 'center' }
 		);
 		c.Click(-140, 1050, '排行榜','line2', function() {

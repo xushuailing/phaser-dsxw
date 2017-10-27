@@ -9,7 +9,9 @@ function key(name) {
 	}, this);
 }
 var c = {
-	Arc: function(x, y, number = 0, color = '0xff0000') {
+	Arc: function(x, y, number, color) {
+		if(!number) number = 0;
+		if(!color) color = '0xff0000';
 		// 队伍的得分百分比
 		if (number > 360) number = 360;
 		var g = game.add.graphics(0, 0),
