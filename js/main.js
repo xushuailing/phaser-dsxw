@@ -160,7 +160,7 @@ var mainState = function() {
 				text = game.add.text(
 					game.world.centerX,
 					210,
-					'您已选择\t'+c.data.DesaiTeamName+'\t的队伍，为他们添加火炬能量',
+					'您已选择\t' + c.data.DesaiTeamName + '\t的队伍，为他们添加火炬能量',
 					{
 						fill: '#000',
 						font: '20px Arial',
@@ -183,13 +183,12 @@ var mainState = function() {
 						desaiTeamName: e.name
 					},
 					success: function(data) {
-						// console.log(data);
 						game.state.add('select', selectState);
 						game.state.start('select');
 					}
 				});
 			} else if (c.data.DesaiTeamID != e.id) {
-				c.hint('您选择的队伍为\n'+c.data.DesaiTeamName+'!');
+				c.hint('您选择的队伍为\n' + c.data.DesaiTeamName + '!');
 			} else {
 				game.state.add('select', selectState);
 				game.state.start('select');
@@ -198,25 +197,6 @@ var mainState = function() {
 	};
 };
 var selectState = function() {
-	this.init = function() {
-		if (c.data.isShareUrl) {
-			/* 队伍选择 */
-			$.ajax({
-				type: 'POST',
-				url: c.data.url + 'WXClientService.ashx?pagetype=update2',
-				async: false,
-				data: {
-					uID: c.data.uID,
-					openID: c.data.wxID,
-					desaiTeamID: c.data.DesaiTeamID,
-					desaiTeamName: c.data.DesaiTeamName
-				},
-				success: function(data) {
-					console.log(data);
-				}
-			});
-		}
-	};
 	this.create = function() {
 		/**
 		 * @troops 背景
@@ -225,58 +205,42 @@ var selectState = function() {
 		 * @click 点击进入游戏
 		 */
 		var troops, selectGame, text;
-		if (c.data.isShareUrl) {
-			/* 规则 */
-			var ruleBg = game.add.image(0, 0, 'tpl_module');
-			var rule = game.add.image(114, 244, 'gameRule');
-			var ruleTitle = c.Title('游戏规则');
-			c.close(function() {
-				rule.destroy();
-				ruleBg.destroy();
-				ruleTitle.destroy();
-				fun();
-			});
-		} else {
-			fun();
-		}
-		function fun() {
-			troops = game.add.image(0, 0, 'tpl_module');
-			selectGame = game.add.image(0, 0, 'selectGame');
-			c.Click(175,981, '排行榜','line1', function() {
-				openTopWay = 'gameBegin';
-				game.state.add('Top', TopState);
-				game.state.start('Top');
-			});
-			game.add
-				.text(
-					game.world.centerX,
-					game.world.height - 90,
-					'已经\t\t\t\t\t\t\t\t\t\t参加活动，快来参加吧',
-					{ fill: '#000', font: '25px Arial', align: 'center' }
-				)
-				.anchor.set(0.5);
-			game.add
-				.text(
-					game.world.centerX - 100,
-					game.world.height - 90,
-					c.data.memberInfo,
-					{ fill: '#f00', font: '25px Arial', align: 'center' }
-				)
-				.anchor.set(0.5);
-			c.Title('运动模式');
-			var click1 = game.add.button(202, 147, 'click', clickFun);
-			var click2 = game.add.button(483, 272, 'click', clickFun);
-			var click3 = game.add.button(309, 495, 'click', clickFun);
-			var click4 = game.add.button(99, 703, 'click', clickFun);
-			click1.scale.set(22, 23);
-			click2.scale.set(20, 22);
-			click3.scale.set(25, 20);
-			click4.scale.set(30, 26);
-			click1.id = 1;
-			click2.id = 2;
-			click3.id = 3;
-			click4.id = 4;
-		}
+		troops = game.add.image(0, 0, 'tpl_module');
+		selectGame = game.add.image(0, 0, 'selectGame');
+		c.Click(175, 981, '排行榜', 'line1', function() {
+			openTopWay = 'gameBegin';
+			game.state.add('Top', TopState);
+			game.state.start('Top');
+		});
+		game.add
+			.text(
+				game.world.centerX,
+				game.world.height - 90,
+				'已经\t\t\t\t\t\t\t\t\t\t参加活动，快来参加吧',
+				{fill: '#000', font: '25px Arial', align: 'center'}
+			)
+			.anchor.set(0.5);
+		game.add
+			.text(
+				game.world.centerX - 100,
+				game.world.height - 90,
+				c.data.memberInfo,
+				{fill: '#f00', font: '25px Arial', align: 'center'}
+			)
+			.anchor.set(0.5);
+		c.Title('运动模式');
+		var click1 = game.add.button(202, 147, 'click', clickFun);
+		var click2 = game.add.button(483, 272, 'click', clickFun);
+		var click3 = game.add.button(309, 495, 'click', clickFun);
+		var click4 = game.add.button(99, 703, 'click', clickFun);
+		click1.scale.set(22, 23);
+		click2.scale.set(20, 22);
+		click3.scale.set(25, 20);
+		click4.scale.set(30, 26);
+		click1.id = 1;
+		click2.id = 2;
+		click3.id = 3;
+		click4.id = 4;
 		function clickFun(e) {
 			var userGameLimit = c.data.userGameLimit[e.id - 1].PlayTime;
 			if (userGameLimit > 4) {
@@ -495,7 +459,9 @@ var GameState = function() {
 									c.data.userGameLimit[c.data.GameType - 1].SportsModeName,
 								score: userScore
 							},
-							success: function(data) {}
+							success: function(data) {
+								console.log(data)
+							}
 						});
 					}, 2000);
 					clearInterval(Interval);
@@ -624,14 +590,14 @@ var GameState = function() {
 			game.add
 				.tween(langan)
 				.to(
-					{ y: langan.y + langan.height - 200 },
+					{y: langan.y + langan.height - 200},
 					gameTime * 1000,
 					'Linear',
 					true
 				);
 			game.add
 				.tween(langan.scale)
-				.to({ x: 1.5, y: 1.5 }, gameTime * 1000, 'Linear', true);
+				.to({x: 1.5, y: 1.5}, gameTime * 1000, 'Linear', true);
 			touch('y');
 		}
 		function tiaoyuan() {
@@ -789,14 +755,14 @@ var scoreState = function() {
 			game.world.centerX,
 			914,
 			'你本次为德赛西威运动会火炬添加\t\t\t\t\t\t\t\t\t个能量',
-			{ fill: '#000', font: '25px Arial', align: 'center' }
+			{fill: '#000', font: '25px Arial', align: 'center'}
 		);
-		c.Click(-140, 1050, '排行榜','line2', function() {
+		c.Click(-140, 1050, '排行榜', 'line2', function() {
 			openTopWay = 'gameEnd';
 			game.state.add('Top', TopState);
 			game.state.start('Top');
 		});
-		c.Click(140, 1050, '继续游戏','line2', function() {
+		c.Click(140, 1050, '继续游戏', 'line2', function() {
 			/* 查看已经游玩的次数以及游玩次数的限制和选择的队伍 */
 			$.ajax({
 				type: 'POST',
@@ -905,7 +871,13 @@ var TopState = function() {
 		var PicShadeLine = game.add.graphics(0, 0); // 边框
 		var PicShade = game.add.graphics(0, 0); // 遮罩
 		var userPic = game.add.image(94, 161, 'userPic'); // 用户头像
-		var userTextString = c.data.wxName+'，感谢你为德赛西威第七届田径运动会火炬添加'+c.data.userDesaiScore+'个能量，在小伙伴排名第'+c.data.userScoreRank+'位。';
+		var userTextString =
+			c.data.wxName +
+			'，感谢你为德赛西威第七届田径运动会火炬添加' +
+			c.data.userDesaiScore +
+			'个能量，在小伙伴排名第' +
+			c.data.userScoreRank +
+			'位。';
 		var userTextConcent = '';
 		var numColorBeg = userTextString.indexOf('名第') + 2;
 		var numColorEnd = userTextString.length - 2;
@@ -986,11 +958,11 @@ var TopState = function() {
 				.anchor.set(0.5);
 		}
 
-		c.Click(-140, 1100, '邀请好友','line2', function() {
+		c.Click(-140, 1100, '邀请好友', 'line2', function() {
 			shareHint();
 		});
 
-		c.Click(140, 1100, '朋友圈嘚瑟','line2', function() {
+		c.Click(140, 1100, '朋友圈嘚瑟', 'line2', function() {
 			shareHint();
 		});
 		c.close(function() {
