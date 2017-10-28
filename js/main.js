@@ -207,8 +207,15 @@ var selectState = function() {
 		var troops, selectGame, text;
 		troops = game.add.image(0, 0, 'tpl_module');
 		selectGame = game.add.image(0, 0, 'selectGame');
-		c.Click(175, 981, '排行榜', 'line1', function() {
+		c.Click(175, 901, '个人榜', 'line1', function() {
 			openTopWay = 'gameBegin';
+			rankingID = '个人';
+			game.state.add('Top', TopState);
+			game.state.start('Top');
+		});
+		c.Click(175, 981, '团队榜', 'line1', function() {
+			openTopWay = 'gameBegin';
+			rankingID = '队伍';
 			game.state.add('Top', TopState);
 			game.state.start('Top');
 		});
@@ -217,7 +224,7 @@ var selectState = function() {
 				game.world.centerX,
 				game.world.height - 90,
 				'已经\t\t\t\t\t\t\t\t\t\t参加活动，快来参加吧',
-				{fill: '#000', font: '25px Arial', align: 'center'}
+				{ fill: '#000', font: '25px Arial', align: 'center' }
 			)
 			.anchor.set(0.5);
 		game.add
@@ -225,7 +232,7 @@ var selectState = function() {
 				game.world.centerX - 100,
 				game.world.height - 90,
 				c.data.memberInfo,
-				{fill: '#f00', font: '25px Arial', align: 'center'}
+				{ fill: '#f00', font: '25px Arial', align: 'center' }
 			)
 			.anchor.set(0.5);
 		c.Title('运动模式');
@@ -460,7 +467,7 @@ var GameState = function() {
 								score: userScore
 							},
 							success: function(data) {
-								console.log(data)
+								// console.log(data);
 							}
 						});
 					}, 2000);
@@ -590,14 +597,14 @@ var GameState = function() {
 			game.add
 				.tween(langan)
 				.to(
-					{y: langan.y + langan.height - 200},
+					{ y: langan.y + langan.height - 200 },
 					gameTime * 1000,
 					'Linear',
 					true
 				);
 			game.add
 				.tween(langan.scale)
-				.to({x: 1.5, y: 1.5}, gameTime * 1000, 'Linear', true);
+				.to({ x: 1.5, y: 1.5 }, gameTime * 1000, 'Linear', true);
 			touch('y');
 		}
 		function tiaoyuan() {
@@ -755,10 +762,11 @@ var scoreState = function() {
 			game.world.centerX,
 			914,
 			'你本次为德赛西威运动会火炬添加\t\t\t\t\t\t\t\t\t个能量',
-			{fill: '#000', font: '25px Arial', align: 'center'}
+			{ fill: '#000', font: '25px Arial', align: 'center' }
 		);
 		c.Click(-140, 1050, '排行榜', 'line2', function() {
 			openTopWay = 'gameEnd';
+			rankingID = '个人';
 			game.state.add('Top', TopState);
 			game.state.start('Top');
 		});
@@ -783,13 +791,12 @@ var scoreState = function() {
 		});
 		p.anchor.set(0.5);
 		game.add
-			.text(513, 915, userScore, {
+			.text(523, 915, userScore, {
 				fill: '#f00',
 				font: '25px Arial',
 				align: 'center'
 			})
 			.anchor.set(0.5);
-		// key(a)
 		scoreImg.anchor.set(0.5);
 		scoreText.anchor.set(0.5);
 		scoreImg.scale.set(1, 0.9);
@@ -798,76 +805,91 @@ var scoreState = function() {
 var TopState = function() {
 	/**
 	 * @userData 个人信息
-	 * @troopsData 列表信息
+	 * @troopsData 队伍排行
+	 * @userTopData 个人排行
 	 */
-	var userData, troopsData;
+	var userData, troopsData, userTopData;
 	this.init = function() {
-		/* 队伍排行榜 */
-		$.ajax({
-			type: 'POST',
-			url: c.data.url + 'Desai_TeamService.ashx?pagetype=rankInfo',
-			async: false,
-			data: {
-				uID: c.data.uID
-			},
-			success: function(data) {
-				var data = eval('(' + data + ')').data;
-				var arr = [];
-				var arrData = [];
-				data.forEach(function(e) {
-					arr.push(parseInt(e.TeamEnergy));
-				}, this);
-				arr.sort(function(a, b) {
-					return b - a;
-				});
-				for (var i = 0; i < arr.length; i++) {
-					for (var j = 0; j < data.length; j++) {
-						var e = data[j];
-						if (parseInt(e.TeamEnergy) == arr[i]) {
-							arrData.push(e);
+		if (rankingID == '队伍' || rankingID == '个人') {
+			/* 用户信息 */
+			$.ajax({
+				type: 'POST',
+				url: c.data.url + 'WXClientService.ashx?pagetype=rankInfo',
+				async: false,
+				data: {
+					uID: c.data.uID,
+					openID: c.data.wxID
+				},
+				success: function(data) {
+					var data = eval('(' + data + ')').data;
+					c.data.userPic = data.Pic;
+					c.data.userDesaiScore = data.DesaiScore;
+					c.data.userScoreRank = data.ScoreRank;
+					c.data.userURL = data.URL;
+				}
+			});
+		}
+		if (rankingID == '个人') {
+			/* 个人排行 */
+			$.ajax({
+				type: 'POST',
+				url: c.data.url + 'WXClientService.ashx?pagetype=rankInfo2',
+				async: false,
+				data: {
+					uID: c.data.uID
+				},
+				success: function(data) {
+					var data = eval('(' + data + ')').data;
+					userTopData = data;
+				}
+			});
+		} else if (rankingID == '队伍') {
+			/* 队伍排行榜 */
+			$.ajax({
+				type: 'POST',
+				url: c.data.url + 'Desai_TeamService.ashx?pagetype=rankInfo',
+				async: false,
+				data: {
+					uID: c.data.uID
+				},
+				success: function(data) {
+					var data = eval('(' + data + ')').data;
+					var arr = [];
+					var arrData = [];
+					data.forEach(function(e) {
+						arr.push(parseInt(e.TeamEnergy));
+					}, this);
+					arr.sort(function(a, b) {
+						return b - a;
+					});
+					for (var i = 0; i < arr.length; i++) {
+						for (var j = 0; j < data.length; j++) {
+							var e = data[j];
+							if (parseInt(e.TeamEnergy) == arr[i]) {
+								arrData.push(e);
+							}
 						}
 					}
+					troopsData = arrData;
 				}
-				troopsData = arrData;
-			}
-		});
-		/* 用户排行 */
-		$.ajax({
-			type: 'POST',
-			url: c.data.url + 'WXClientService.ashx?pagetype=rankInfo',
-			async: false,
-			data: {
-				uID: c.data.uID,
-				openID: c.data.wxID
-			},
-			success: function(data) {
-				var data = eval('(' + data + ')').data;
-				// console.log(data)
-				c.data.userPic = data.Pic;
-				c.data.userDesaiScore = data.DesaiScore;
-				c.data.userScoreRank = data.ScoreRank;
-				c.data.userURL = data.URL;
-			}
-		});
+			});
+		}
 	};
 	this.preload = function() {
-		game.load.image('userPic', c.data.userPic);
+		if (rankingID == '队伍' || rankingID == '个人') {
+			game.load.image('userPic', c.data.userPic);
+		}
+		if (rankingID == '个人') {
+			for (var i = 0; i < userTopData.length; i++) {
+				var e = userTopData[i];
+				game.load.image('userPic' + (i + 1), e.Pic);
+			}
+		}
 	};
 	this.create = function() {
-		var tpl_module = game.add.image(0, 0, 'tpl_module');
-		var line3 = game.add.image(game.world.centerX, 310, 'line3');
-		line3.anchor.set(0.5);
-		var icons = [
-			'icon1',
-			'icon2',
-			'icon3',
-			'icon4',
-			'icon5',
-			'icon6',
-			'icon7',
-			'icon8'
-		];
-		c.Title('运动达人榜');
+		game.add.image(0, 0, 'tpl_module');
+		c.Title('能量榜');
+		game.add.image(game.world.centerX, 310, 'line3').anchor.set(0.5);
 		var PicShadeLine = game.add.graphics(0, 0); // 边框
 		var PicShade = game.add.graphics(0, 0); // 遮罩
 		var userPic = game.add.image(94, 161, 'userPic'); // 用户头像
@@ -921,50 +943,94 @@ var TopState = function() {
 		userPic.width = 120;
 		userPic.height = 120;
 		userPic.mask = PicShadeLine;
-		for (var i = 0; i < troopsData.length; i++) {
-			var e = troopsData[i]; // 每条数据
-			var sum = i * 84; // 上下间隔
-			var graphics = game.add.graphics(0, 0); // 遮罩
-			var graphics1 = game.add.graphics(0, 0); // 队名框
-			var graphics2 = game.add.graphics(0, 0); // 得分框
+		if (rankingID == '个人') {
+			for (var i = 0; i < userTopData.length; i++) {
+				var e = userTopData[i]; // 每条数据
+				var sum = i * 70; // 上下间隔
+				var graphics = game.add.graphics(0, 0); // 遮罩
+				var graphics1 = game.add.graphics(0, 0); // 队名框
+				var graphics2 = game.add.graphics(0, 0); // 得分框
+				var usePicShade = game.add.graphics(0, 0);
+				var text = i + 1;
+				if (text < 4) text = '';
+				game.add
+					.text(104, 380 + sum, text, {
+						fill: '#000',
+						font: '35px Arial',
+						align: 'center'
+					})
+					.anchor.set(0.5);
+				var user_pic = game.add.image(137, 352 + sum, 'userPic' + (i + 1));
 
-			game.add.text(94, 358 + sum, i + 1, {
-				fill: '#000',
-				font: '35px Arial',
-				align: 'center'
-			});
-			game.add.image(132, 347 + sum, 'icon' + e.Pic).scale.set(0.7);
-			graphics.beginFill(0x000000);
-			graphics.drawRoundedRect(213, 350 + sum, 442, 55, 10);
-			graphics1.beginFill(0xcccccc);
-			graphics1.drawRoundedRect(208, 345 + sum, 320, 65, 10);
-			graphics2.beginFill('0x' + e.Color);
-			graphics2.drawRoundedRect(518, 345 + sum, 140, 65, 10);
-			graphics1.mask = graphics;
-			graphics2.mask = graphics;
-			game.add
-				.text(588, 380 + sum, e.TeamEnergy, {
-					fill: '#fff',
-					font: '30px Arial',
-					align: 'center'
-				})
-				.anchor.set(0.5);
-			game.add
-				.text(370, 380 + sum, e.Name, {
-					fill: '#000',
-					font: '25px Arial',
-					align: 'center'
-				})
-				.anchor.set(0.5);
+				user_pic.width = 55;
+				user_pic.height = 55;
+				usePicShade.beginFill(0x000000);
+				usePicShade.drawCircle(163, 377 + sum, 48);
+				user_pic.mask = usePicShade;
+				graphics.beginFill(0x000000);
+				graphics.drawRoundedRect(213, 350 + sum, 442, 55, 10);
+				graphics1.beginFill(0xcccccc);
+				graphics1.drawRoundedRect(208, 345 + sum, 320, 65, 10);
+				graphics2.beginFill(0x132c81);
+				graphics2.drawRoundedRect(518, 345 + sum, 140, 65, 10);
+				graphics1.mask = graphics;
+				graphics2.mask = graphics;
+				game.add
+					.text(588, 380 + sum, e.TeamEnergy, {
+						fill: '#fff',
+						font: '30px Arial',
+						align: 'center'
+					})
+					.anchor.set(0.5);
+				game.add
+					.text(370, 380 + sum, e.Name, {
+						fill: '#000',
+						font: '25px Arial',
+						align: 'center'
+					})
+					.anchor.set(0.5);
+			}
+			game.add.image(86, 348, 'top1').scale.set(0.5);
+			game.add.image(88, 427, 'top2').scale.set(0.5);
+			game.add.image(90, 496, 'top3').scale.set(0.5);
 		}
-
-		c.Click(-140, 1100, '邀请好友', 'line2', function() {
-			shareHint();
-		});
-
-		c.Click(140, 1100, '朋友圈嘚瑟', 'line2', function() {
-			shareHint();
-		});
+		if (rankingID == '队伍') {
+			for (var i = 0; i < troopsData.length; i++) {
+				var e = troopsData[i]; // 每条数据
+				var sum = i * 84; // 上下间隔
+				var graphics = game.add.graphics(0, 0); // 遮罩
+				var graphics1 = game.add.graphics(0, 0); // 队名框
+				var graphics2 = game.add.graphics(0, 0); // 得分框
+				game.add.text(94, 358 + sum, i + 1, {
+					fill: '#000',
+					font: '35px Arial',
+					align: 'center'
+				});
+				game.add.image(132, 347 + sum, 'icon' + e.Pic).scale.set(0.7);
+				graphics.beginFill(0x000000);
+				graphics.drawRoundedRect(213, 350 + sum, 442, 55, 10);
+				graphics1.beginFill(0xcccccc);
+				graphics1.drawRoundedRect(208, 345 + sum, 320, 65, 10);
+				graphics2.beginFill('0x' + e.Color);
+				graphics2.drawRoundedRect(518, 345 + sum, 140, 65, 10);
+				graphics1.mask = graphics;
+				graphics2.mask = graphics;
+				game.add
+					.text(588, 380 + sum, e.TeamEnergy, {
+						fill: '#fff',
+						font: '30px Arial',
+						align: 'center'
+					})
+					.anchor.set(0.5);
+				game.add
+					.text(370, 380 + sum, e.Name, {
+						fill: '#000',
+						font: '25px Arial',
+						align: 'center'
+					})
+					.anchor.set(0.5);
+			}
+		}
 		c.close(function() {
 			if (openTopWay === 'gameEnd') {
 				game.state.add('score', scoreState);
@@ -974,7 +1040,12 @@ var TopState = function() {
 				game.state.start('select');
 			}
 		});
-
+		c.Click(-140, 1100, '邀请好友', 'line2', function() {
+			shareHint();
+		});
+		c.Click(140, 1100, '朋友圈嘚瑟', 'line2', function() {
+			shareHint();
+		});
 		function shareHint() {
 			var btn = game.add.button(0, 0, 'shareHint', function() {
 				btn.destroy();

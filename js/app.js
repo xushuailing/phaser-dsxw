@@ -157,6 +157,7 @@ var c = {
 		 * @userDesaiScore 用户总分数
 		 * @userURL 用户分享链接
 		 * @openTopWay 打开排行榜方式
+		 * @rankingID 排行项目
 		 */
 		GameType: null,
 		url: 'http://saas.zeego.cn/Interface/DesaiTorch/',
@@ -178,10 +179,10 @@ var c = {
 		userDesaiScore:null,
 		userURL:null,
 		openTopWay:null,
+		rankingID:null
 	}
 };
 
-// console.log(c._InitWXLogin())
 c.data.wxID = c._InitWXLogin().id
 c.data.wxName = c._InitWXLogin().name
 c.data.wxPic = c._InitWXLogin().headimgsrc

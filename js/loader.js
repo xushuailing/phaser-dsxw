@@ -87,7 +87,7 @@ var loaderState = function(game) {
 				arr[i].alpha = 0;
 				game.add
 					.tween(arr[i])
-					.to({alpha: 1}, 1000, 'Linear', true, 500, 1, true);
+					.to({ alpha: 1 }, 1000, 'Linear', true, 500, 1, true);
 				setTimeout(function() {
 					for (var i = 0; i < arr.length; i++) {
 						arr[i].destroy();
@@ -166,6 +166,9 @@ var loaderState = function(game) {
 		game.load.image('shareHint', 'images/shareHint.png');
 		game.load.image('return', 'images/return.png');
 		game.load.image('qianqiuHint', 'images/qianqiuHint.png');
+		game.load.image('top1', 'images/top1.png');
+		game.load.image('top2', 'images/top2.png');
+		game.load.image('top3', 'images/top3.png');
 		game.load.atlasXML(
 			'hand4',
 			'images/elf-zuoyou/elf.png',
@@ -196,13 +199,8 @@ var loaderState = function(game) {
 		group.alpha = 1;
 		game.input.onTap.add(function() {
 			clearInterval(time);
-			if (c.data.isShareUrl) {
-				game.state.add('select', selectState);
-				game.state.start('select');
-			} else {
-				game.state.add('main', mainState);
-				game.state.start('main');
-			}
+			game.state.add('main', mainState);
+			game.state.start('main');
 		}, this);
 
 		// game.state.add('select', selectState)

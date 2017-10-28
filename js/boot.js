@@ -30,7 +30,7 @@ var bootState = function(game) {
 			},
 			success: function(data) {
 				var data = eval('(' + data + ')');
-				console.log(data);
+				// console.log(data);
 				c.data.userGameLimit = data.data;
 				if (data.TeamID == '0') {
 					return;
@@ -52,7 +52,7 @@ var bootState = function(game) {
 				},
 				success: function(data) {
 					var data = eval('(' + data + ')').data;
-					console.log(data);
+					// console.log(data);
 					c.data.userPic = data.Pic;
 					c.data.userDesaiScore = data.DesaiScore;
 					c.data.userScoreRank = data.ScoreRank;
